@@ -1,0 +1,32 @@
+.container {
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  /* border-radius: 10px; */
+}
+
+.header h4 {
+  color: #dc3545;
+}
+
+.listGroup {
+  max-width: 35rem;
+  margin: 20px auto;
+  padding: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  list-style-type: none;
+}
+
+.noTasks {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.noTasks h5 {
+  color: #999;
+}

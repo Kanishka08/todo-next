@@ -1,68 +1,61 @@
-// import { Button, Collapse, Form } from "react-bootstrap";
-// import { useState } from "react";
-// const AddTask = () => {
-//   const [open, setOpen] = useState(false);
-//   return (
-//     <>
-//       <Button
-//         onClick={() => setOpen(!open)}
-//         aria-controls="example-collapse-text"
-//         aria-expanded={open}
-//         variant="info"
-//         className="w-100 mb-3"
-//       >
-//         Add Task
-//       </Button>
-//       <Collapse in={open}>
-//         <div id="example-collapse-text">
-//           <Form>
-//             <Form.Group className=" d-flex" controlId="formBasicEmail">
-//               <Form.Control
-//                 as="textarea"
-//                 className="me-3 border-2 border-dark"
-//                 placeholder="Enter New Task"
-//               />
-//               <Button variant="dark" className="align-self-end px-4">
-//                 Add
-//               </Button>
-//             </Form.Group>
-//           </Form>
-//         </div>
-//       </Collapse>
-//     </>
-//   );
-// };
+import { useState, useRef } from "react";
+import styles from "../styles/AddTask.module.css";
 
-// export default AddTask;
-
-import { useState } from "react";
-
-const AddTask = () => {
+const AddTask = (props) => {
   const [open, setOpen] = useState(false);
+  const taskRef = useRef();
+
+  const onTaskSubmitHandler = async (e) => {
+    e.preventDefault();
+    const enteredTask = {
+      task: taskRef.current.value,
+      completed: false,
+    };
+    const response = await fetch("/api/new-todos", {
+      method: "POST",
+      body: JSON.stringify(enteredTask),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    const task = {
+      id: data.insertedId,
+      ...enteredTask,
+    };
+    props.addTask(task);
+  };
 
   return (
-    <div>
+    <>
       <button
         onClick={() => setOpen(!open)}
         aria-controls="example-collapse-text"
         aria-expanded={open}
-        className="button"
+        className={`${styles.button} ${styles.addTaskButton}`}
       >
         Add Task
       </button>
       {open && (
-        <div id="example-collapse-text" className="collapse-content">
-          <form>
-            <div className="form-group">
-              <textarea className="textarea" placeholder="Enter New Task" />
-              <button type="submit" className="add-button">
-                Add
-              </button>
+        <div id="example-collapse-text" className={styles.collapseContent}>
+          <form onSubmit={onTaskSubmitHandler} className={styles.form}>
+            <div className={styles.formGroup}>
+              <textarea
+                className={styles.textarea}
+                placeholder="Enter New Task"
+                ref={taskRef}
+              />
             </div>
+            <button
+              type="submit"
+              className={`${styles.button} ${styles.submitButton}`}
+            >
+              Add
+            </button>
           </form>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
